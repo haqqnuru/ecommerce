@@ -1,24 +1,24 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import icon from '../assets/icon.svg'
-import { auth } from '../firebase/firebase'
 import { connect } from 'react-redux';
 import CartIcon from './cartIcon';
 import CartDropDown from './cartDropDown';
 import { createStructuredSelector } from 'reselect';
 import { selectCurrentUser } from '../redux/user/user.selectors';
 import { selectCartHidden } from '../redux/cart/cart.selectors';
+import { signOutStart } from '../redux/user/user.actions';
 
 
-function Header({ currentUser, hidden }) {
+function Header({ currentUser, hidden, signOutStart }) {
   return (
-    <nav className="navbar navbar-expand-lg navbar-warning bg-warning sticky" 
-    style={{ 
-      position: 'sticky', 
-      top: 0, 
-      zIndex: 100, 
-      backgroundColor: 'white' 
-    }}>
+    <nav className="navbar navbar-expand-lg navbar-warning bg-warning sticky"
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        backgroundColor: 'white'
+      }}>
       <Link className="navbar-brand" to="/">
         <img
           src={icon}
@@ -50,7 +50,7 @@ function Header({ currentUser, hidden }) {
             <span
               className="nav-item nav-link"
               style={{ cursor: "pointer" }}
-              onClick={() => auth.signOut()}
+              onClick={signOutStart}
             >
               SIGN OUT
             </span>
@@ -60,10 +60,10 @@ function Header({ currentUser, hidden }) {
             </NavLink>
           )}
 
-          <CartIcon/>
-        
-        </div>{ hidden ? null :
-        <CartDropDown/> }
+          <CartIcon />
+
+        </div>{hidden ? null :
+          <CartDropDown />}
       </div>
     </nav>
   )
@@ -75,5 +75,11 @@ const mapStateToProps = createStructuredSelector({
   hidden: selectCartHidden
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = dispatch => ({
+  signOutStart: () => dispatch(signOutStart())
+});
 
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Header);

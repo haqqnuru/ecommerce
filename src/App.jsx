@@ -7,16 +7,13 @@ import './sass/directory.styles.scss'
 import { Route, Routes, Navigate } from 'react-router-dom'
 import ShopPage from './pages/shopPage'
 import Header from './components/header'
-import { onSnapshot } from 'firebase/firestore';
-import { auth, createUserProfileDocument } from './firebase/firebase'
 import SignInSignOutPage from './pages/signInSignOutPage'
 import { connect } from 'react-redux';
-import { setCurrentUser } from './redux/user/user.actions';
-import { getSerializableUser } from './util/utils'
 import CartIcon from './components/cartIcon'
 import { createStructuredSelector } from 'reselect'
 import { selectCurrentUser } from './redux/user/user.selectors'
 import CheckOutPage from './pages/checkOutPage'
+import { checkUserSession } from './redux/user/user.actions'
 
 
 
@@ -26,20 +23,9 @@ export class App extends Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
     // this allows a user to stay logged in
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-
-        onSnapshot(userRef, (snapShot) => {
-          const serializableUser = getSerializableUser(userAuth, snapShot);
-          setCurrentUser(serializableUser);
-        });
-      } else {
-        setCurrentUser(null);
-      }
-    });
+    const { checkUserSession } = this.props;
+    checkUserSession();
   }
 
 
@@ -79,8 +65,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-
+  checkUserSession: () => dispatch(checkUserSession())
 });
 
 export default connect(

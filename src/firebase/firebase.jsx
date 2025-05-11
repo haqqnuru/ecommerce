@@ -17,16 +17,16 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize services
-export const auth = getAuth(app);
-export const db = getFirestore(app);
+// // Initialize services
+// export const auth = getAuth(app);
+// export const db = getFirestore(app);
 
-// Set up Google provider
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
+// // Set up Google provider
+// const provider = new GoogleAuthProvider();
+// provider.setCustomParameters({ prompt: 'select_account' });
 
-// Export the sign-in function
-export const signInWithGoogle = () => signInWithPopup(auth, provider);
+// // Export the sign-in function
+// export const signInWithGoogle = () => signInWithPopup(auth, provider);
 
 // Create or get user document
 export const createUserProfileDocument = async (userAuth, additionalData) => {
@@ -85,3 +85,25 @@ export const convertCollectionsSnapshotToMap = (collections) => {
     return accumulator;
   }, {});
 };
+
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged(userAuth => {
+      unsubscribe();
+      resolve(userAuth);
+    }, reject);
+  });
+};
+
+
+// Initialize services
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+
+// Set up Google provider
+export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+// Export the sign-in function
+export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
