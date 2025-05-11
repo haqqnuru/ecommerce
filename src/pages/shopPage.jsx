@@ -5,7 +5,7 @@ import { createStructuredSelector } from 'reselect';
 import CollectionPageContainer from '../components/collectionsContainer';
 import { selectIsCollectionFetching } from '../redux/shop/shop.selectors';
 
-import { fetchCollectionsStartAsync } from '../redux/shop/shop.actions';
+import { fetchCollectionsStart } from '../redux/shop/shop.actions';
 import WithSpinner from '../components/withSpinner';
 import CollectionsOverview from '../components/collectionsOverview'
 
@@ -23,9 +23,9 @@ class ShopPage extends Component {
   // This loads your shop collection data from Firebase into Redux 
   // when the shop page is first shown.
   componentDidMount() {
-    const { fetchCollectionsStartAsync } = this.props;
+    const { fetchCollectionsStart } = this.props;
 
-    fetchCollectionsStartAsync();
+    fetchCollectionsStart();
 
   }
 
@@ -54,7 +54,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchCollectionsStartAsync: () => dispatch(fetchCollectionsStartAsync()),
+  fetchCollectionsStart: () => dispatch(fetchCollectionsStart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShopPage);

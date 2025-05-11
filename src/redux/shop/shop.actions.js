@@ -4,6 +4,8 @@ import {
   convertCollectionsSnapshotToMap
 } from '../../firebase/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+
+
 export const fetchCollectionsStart = () => ({
   type: ShopActionTypes.FETCH_COLLECTIONS_START
 });
@@ -18,18 +20,18 @@ export const fetchCollectionsFailure = errorMessage => ({
   payload: errorMessage
 });
 
-export const fetchCollectionsStartAsync = () => {
-  return dispatch => {
-    dispatch(fetchCollectionsStart()); // ← ADD THIS LINE
+// export const fetchCollectionsStartAsync = () => {
+//   return dispatch => {
+//     dispatch(fetchCollectionsStart()); // ← ADD THIS LINE
 
-    const collectionRef = collection(db, 'collections');
+//     const collectionRef = collection(db, 'collections');
 
-    getDocs(collectionRef)
-      .then((snapshot) => {
-        const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
-        dispatch(fetchCollectionsSuccess(collectionsMap));
-      })
-      .catch(error => dispatch(fetchCollectionsFailure(error.message)));
-  };
-};
+//     getDocs(collectionRef)
+//       .then((snapshot) => {
+//         const collectionsMap = convertCollectionsSnapshotToMap(snapshot);
+//         dispatch(fetchCollectionsSuccess(collectionsMap));
+//       })
+//       .catch(error => dispatch(fetchCollectionsFailure(error.message)));
+//   };
+// };
 
