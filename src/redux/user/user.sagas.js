@@ -1,5 +1,10 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects';
-import { signInWithPopup, signInWithEmailAndPassword } from 'firebase/auth';
+import {
+    signInWithPopup,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signOut as firebaseSignOut
+} from 'firebase/auth';
 
 import UserActionTypes from './user.types';
 
@@ -43,10 +48,16 @@ export function* signInWithGoogle() {
 
 export function* signInWithEmail({ payload: { email, password } }) {
     try {
-        const result = yield call(signInWithEmailAndPassword, auth, email, password);
-        const { user } = result;
+        const userCredential = yield call(
+            signInWithEmailAndPassword,
+            auth,
+            email,
+            password
+        );
+        const { user } = userCredential;
         yield call(getSnapshotFromUserAuth, user);
     } catch (error) {
+        console.error('Sign-in error:', error.code, error.message);
         yield put(signInFailure(error));
     }
 }
@@ -63,7 +74,7 @@ export function* isUserAuthenticated() {
 
 export function* signOut() {
     try {
-        yield auth.signOut();
+        yield call(firebaseSignOut, auth); // Using the imported function
         yield put(signOutSuccess());
     } catch (error) {
         yield put(signOutFailure(error));
@@ -72,15 +83,26 @@ export function* signOut() {
 
 export function* signUp({ payload: { email, password, displayName } }) {
     try {
-        const { user } = yield auth.createUserWithEmailAndPassword(email, password);
+        const { user } = yield call(
+            createUserWithEmailAndPassword, // Now properly imported
+            auth,
+            email,
+            password
+        );
         yield put(signUpSuccess({ user, additionalData: { displayName } }));
     } catch (error) {
+        console.error('Sign-up error:', error);
         yield put(signUpFailure(error));
     }
 }
 
 export function* signInAfterSignUp({ payload: { user, additionalData } }) {
-    yield getSnapshotFromUserAuth(user, additionalData);
+    try {
+        yield call(getSnapshotFromUserAuth, user, additionalData);
+    } catch (error) {
+        console.error('Post-sign-up error:', error);
+        yield put(signInFailure(error));
+    }
 }
 
 export function* onGoogleSignInStart() {

@@ -22,6 +22,11 @@ class SignIn extends Component {
     const { emailSignInStart } = this.props;
     const { email, password } = this.state;
 
+    if (!email || !password) {
+      alert('Please enter both email and password');
+      return;
+    }
+
     emailSignInStart(email, password);
   };
 

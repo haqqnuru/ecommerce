@@ -3,6 +3,8 @@ import FormInput from './formInput'
 import CustomButton from './customButton'
 import { auth, createUserProfileDocument } from '../firebase/firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { connect } from 'react-redux';
+import { signUpStart } from '../redux/user/user.actions';
 
 
 
@@ -10,41 +12,35 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 
 class SignUp extends Component {
-constructor(props) {
-  super(props)
+  constructor(props) {
+    super(props)
 
-  this.state = {
-    displayName: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    this.state = {
+      displayName: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
+    }
   }
-}
 
-handleSubmit = async event => {
+  handleSubmit = async event => {
     event.preventDefault();
-
+    const { signUpStart } = this.props;
     const { displayName, email, password, confirmPassword } = this.state;
-// check if passwords match
+
     if (password !== confirmPassword) {
-      alert("passwords don't match");
+      alert("Passwords don't match");
       return;
     }
 
-    try {
-        const { user } = await createUserWithEmailAndPassword(auth, email, password);
-        await createUserProfileDocument(user, { displayName });
-      
-        this.setState({
-          displayName: '',
-          email: '',
-          password: '',
-          confirmPassword: ''
-        });
-      } catch (error) {
-        console.error(error);
-      }
+    if (!displayName || !email || !password) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    signUpStart({ displayName, email, password });
   };
+
 
   handleChange = event => {
     const { name, value } = event.target;
@@ -57,11 +53,11 @@ handleSubmit = async event => {
 
     const { displayName, email, password, confirmPassword } = this.state;
     return (
-        <div className='sign-up'>
+      <div className='sign-up'>
         <h2 className='title'>I do not have a account</h2>
         <span>Sign up with your email and password</span>
         <form className='sign-up-form' onSubmit={this.handleSubmit}>
-        <FormInput
+          <FormInput
             type='text'
             name='displayName'
             value={displayName}
@@ -100,5 +96,11 @@ handleSubmit = async event => {
   }
 }
 
-export default SignUp
+const mapDispatchToProps = dispatch => ({
+  signUpStart: userCredentials => dispatch(signUpStart(userCredentials))
+});
 
+export default connect(
+  null,
+  mapDispatchToProps
+)(SignUp);

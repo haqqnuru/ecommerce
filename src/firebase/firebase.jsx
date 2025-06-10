@@ -99,6 +99,7 @@ export const getCurrentUser = () => {
 
 // Initialize services
 export const auth = getAuth(app);
+auth.useDeviceLanguage();
 export const db = getFirestore(app);
 
 // Set up Google provider
