@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -18,37 +18,29 @@ const CollectionPageContainerWrapper = () => {
   return <CollectionPageContainer collectionId={collectionId} />;
 };
 
-class ShopPage extends Component {
+const ShopPage = ({ fetchCollectionsStart, isFetchingCollections }) => {
 
   // This loads your shop collection data from Firebase into Redux 
   // when the shop page is first shown.
-  componentDidMount() {
-    const { fetchCollectionsStart } = this.props;
-
+  useEffect(() => {
     fetchCollectionsStart();
+  }, [fetchCollectionsStart]);
 
-  }
-
-  render() {
-    const { isFetchingCollections } = this.props;
-
-    return (
-      <div className="shop-page">
-        <Routes>
-          <Route
-            index
-            element={<CollectionsOverviewWithSpinner isLoading={isFetchingCollections} />}
-          />
-          <Route
-            path=":collectionId"
-            element={<CollectionPageContainerWrapper />}
-          />
-        </Routes>
-      </div>
-    );
-  }
+  return (
+    <div className="shop-page">
+      <Routes>
+        <Route
+          index
+          element={<CollectionsOverviewWithSpinner isLoading={isFetchingCollections} />}
+        />
+        <Route
+          path=":collectionId"
+          element={<CollectionPageContainerWrapper />}
+        />
+      </Routes>
+    </div>
+  );
 }
-
 const mapStateToProps = createStructuredSelector({
   isFetchingCollections: selectIsCollectionFetching,
 });
