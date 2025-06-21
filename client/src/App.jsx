@@ -14,6 +14,8 @@ import { createStructuredSelector } from 'reselect'
 import { selectCurrentUser } from './redux/user/user.selectors'
 import CheckOutPage from './pages/checkOutPage'
 import { checkUserSession } from './redux/user/user.actions'
+import '@stripe/stripe-js';
+import '@stripe/react-stripe-js';
 
 
 
@@ -46,10 +48,13 @@ const App = ({ checkUserSession, currentUser }) => {
     </>
   )
 }
+
+// This is a function that lets us access the value in the global state.
 const mapStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser,
 });
 
+// gives us access to the dispatch method which allows us send actions through reducers in the store.
 const mapDispatchToProps = dispatch => ({
   checkUserSession: () => dispatch(checkUserSession())
 });
