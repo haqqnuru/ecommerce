@@ -32,7 +32,7 @@ const StripeCheckoutButton = ({ price }) => {
       name='E-Commerce'
       billingAddress
       shippingAddress
-      image={icon}
+      //image={icon}
       description={`Your total is $${price}`}
       amount={priceForStripe}
       panelLabel='Pay Now'

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import './App.css'
+import { GlobalStyle } from './global.styles'
 import HomePage from './pages/homepage'
 import './sass/homepage.styles.scss'
 import './sass/menu-item.styles.scss'
@@ -27,6 +27,7 @@ const App = ({ checkUserSession, currentUser }) => {
 
   return (
     <>
+      <GlobalStyle />
       <Header />
       <Routes>
         <Route path='/' element={<HomePage />} />

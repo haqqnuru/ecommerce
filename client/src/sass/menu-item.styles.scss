@@ -8,23 +8,27 @@
   border: 1px solid black;
   margin: 0 7.5px 15px;
   overflow: hidden;
+  position: relative;
 
   &:hover {
     cursor: pointer;
 
-    & .background-image {
+    .background-image {
       transform: scale(1.1);
       transition: transform 6s cubic-bezier(0.25, 0.45, 0.45, 0.95);
     }
 
-    & .content {
+    .content {
       opacity: 0.9;
     }
   }
 
-
   &.large {
     height: 380px;
+
+    @media screen and (max-width: 800px) {
+      height: 240px;
+    }
   }
 
   &:first-child {
@@ -33,6 +37,12 @@
 
   &:last-child {
     margin-left: 7.5px;
+  }
+
+  @media screen and (max-width: 800px) {
+    width: 80%;
+    min-width: unset;
+    height: 200px;
   }
 
   .background-image {
@@ -51,23 +61,32 @@
     justify-content: center;
     border: 1px solid black;
     position: absolute;
+    background-color: white;
+    opacity: 0.7;
 
     .title {
       font-weight: bold;
       margin-bottom: 6px;
       font-size: 22px;
       color: #4a4a4a;
+
+      @media screen and (max-width: 800px) {
+        font-size: 18px;
+      }
     }
 
     .subtitle {
       font-weight: lighter;
       font-size: 16px;
+
+      @media screen and (max-width: 800px) {
+        font-size: 14px;
+      }
     }
   }
 }
 
-// cart- icon
-
+// cart icon
 .cart-icon {
   width: 45px;
   height: 45px;
@@ -87,6 +106,20 @@
     font-size: 10px;
     font-weight: bold;
     bottom: 12px;
+  }
+
+  @media screen and (max-width: 800px) {
+    width: 40px;
+    height: 40px;
+
+    .shopping-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .item-count {
+      font-size: 9px;
+    }
   }
 }
 
@@ -113,16 +146,25 @@
     height: 240px;
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    overflow-y: auto;
   }
 
   button {
     margin-top: auto;
   }
+
+  @media screen and (max-width: 800px) {
+    width: 200px;
+    right: 20px;
+    top: 80px;
+
+    .empty-message {
+      font-size: 16px;
+    }
+  }
 }
 
-
-// checkout Item 
+// checkout item
 .checkout-item {
   width: 100%;
   display: flex;
@@ -164,19 +206,40 @@
     padding-left: 12px;
     cursor: pointer;
   }
+
+  @media screen and (max-width: 800px) {
+    font-size: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .image-container {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .name,
+    .quantity,
+    .price {
+      width: 100%;
+    }
+
+    .quantity {
+      margin: 5px 0;
+    }
+
+    .remove-button {
+      align-self: flex-end;
+    }
+  }
 }
 
-
-
-// with spinner 
-
+// spinner overlay
 .spinner-overlay {
   height: 60vh;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-
 
   .spinner-container {
     display: inline-block;
@@ -191,13 +254,20 @@
 
   @keyframes spin {
     to {
-      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
     }
   }
 
   @-webkit-keyframes spin {
     to {
       -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .spinner-container {
+      width: 40px;
+      height: 40px;
     }
   }
 }
